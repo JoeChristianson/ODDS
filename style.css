@@ -1,0 +1,20 @@
+.grid{
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr 1fr 4fr 4fr 4fr;
+    text-align: center;
+    vertical-align: center;
+}
+
+.headers{
+    font-size: 1.2rem;
+    font-weight: 700;
+    
+}
+
+.grid div{
+    border:2px solid black;
+    padding:.5rem;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
