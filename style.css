@@ -1,8 +1,23 @@
+body{
+    margin: 0;
+}
+
+header{
+    background: grey;
+    padding:10px
+}
+
+header>h1{
+    margin: 0;
+    text-align: center;
+}
+
 .grid{
     display: grid;
     grid-template-columns: 2fr 2fr 1fr 1fr 1fr 4fr 4fr 4fr;
     text-align: center;
     vertical-align: center;
+    margin:20px;
 }
 
 .headers{

@@ -1,3 +1,5 @@
+const selector = document.querySelector(".book-selector")
+
 const data = [
     {
         "id": "2e7a01ec932b78b4b49203dad1246f5e",
@@ -53707,22 +53709,19 @@ const data = [
 
 const grid = document.querySelector(".grid")
 
-
-
-const bookmaker = "fanduel"
 const API_KEY = "f10917e30207df2c2a7d81210200cd11"   
 
-const fetchOdds = async ()=>{
+const fetchOdds = async (bookmaker)=>{
     // const resp = await fetch(`https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/odds/?apiKey=${API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`)
     // const data = await resp.json()
-    const tableArray = convertDataForTable(data)
-
+    const tableArray = convertDataForTable(data,bookmaker)
+    grid.innerHTML = ""
     tableArray.forEach(td=>{
-        console.log(`${td.away} at ${td.home}: 
-        MoneyLine: ${td.moneyline[0].name}:${td.moneyline[0].price} / ${td.moneyline[1].name}:${td.moneyline[1].price}
-        Spreads: ${td.spreads[0].name}:${td.spreads[0].point} / ${td.spreads[1].name}:${td.spreads[1].point}
-        Over/Under: ${td.overUnder[0].name}:${td.overUnder[0].point} / ${td.overUnder[1].name}:${td.overUnder[1].point}
-        `);
+        // console.log(`${td.away} at ${td.home}: 
+        // MoneyLine: ${td.moneyline[0].name}:${td.moneyline[0].price} / ${td.moneyline[1].name}:${td.moneyline[1].price}
+        // Spreads: ${td.spreads[0].name}:${td.spreads[0].point} / ${td.spreads[1].name}:${td.spreads[1].point}
+        // Over/Under: ${td.overUnder[0].name}:${td.overUnder[0].point} / ${td.overUnder[1].name}:${td.overUnder[1].point}
+        // `);
         const row = `
         <div>
         ${td.startTime}
@@ -53756,14 +53755,14 @@ const fetchOdds = async ()=>{
     })
 }
 
-fetchOdds()
-
-function convertDataForTable(data){
+fetchOdds("draftkings")
+fetchBookmakers(data)
+function convertDataForTable(data,bookmaker){
     const res = data.map(d=>{
         const bookie = d.bookmakers.find(d=>d.key===bookmaker);
-        const headToHead = bookie?.markets?.find(m=>m.key==="h2h").outcomes;
-        const spreads = bookie?.markets?.find(m=>m.key==="spreads").outcomes;
-        const totals = bookie?.markets?.find(m=>m.key==="totals").outcomes;
+        const headToHead = bookie?.markets?.find(m=>m.key==="h2h")?.outcomes;
+        const spreads = bookie?.markets?.find(m=>m.key==="spreads")?.outcomes;
+        const totals = bookie?.markets?.find(m=>m.key==="totals")?.outcomes;
         return {
             home:d.home_team,
             away:d.away_team,
@@ -53779,3 +53778,32 @@ function convertDataForTable(data){
 
     return res
 }
+
+function fetchBookmakers(data){
+    const bookmakers = []
+
+    data.forEach(game=>{
+        game.bookmakers.forEach(bookmaker=>{
+            const {key,title} = bookmaker
+            if(bookmakers.filter(b=>b.key===key).length===0){
+                bookmakers.push({key,title})
+            }
+        })
+    })
+    console.log(bookmakers);
+
+    bookmakers.forEach(book=>{
+        const option = document.createElement("option")
+        option.value = book.key
+        option.textContent = book.title
+        selector.appendChild(option)
+    })
+    selector.value="fanduel"
+    return bookmakers
+}
+
+selector.addEventListener("change",(e)=>{
+    const {value} = e.target
+    fetchOdds(value)
+})
+
