@@ -6,24 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="index.js" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>
+    <header class="d-flex">
+        <h1 class="px-4">
             Sam's Odds
         </h1>
-        <select class="book-selector"></select>
+        <div class="m-auto">
+            <label>Bookmaker: </label>
+            <select class="book-selector"></select>
+        </div>
+        <div class="header-buttons">
+            <button class="refetch-once-btn">Refresh Once</button>
+            <button class="refetch-timer-btn">Refresh on Timer</button>
+            <div>
+                <label for="timer-selector">Refresh Interval</label>
+                <select>
+                    <option value="30">30 seconds</option>
+                    <option value="60">One Minute</option>
+                    <option value="120">Two Minutes</option>
+                    <option value="300">Five Minutes</option>
+                    <option value="600">Ten Minutes</option>
+                    <option value="1800">Half Hour</option>
+                    <option value="3600">Hour</option>
+                </select>
+            </div>
+            <div>
+                Last Refreshed: <span class="last-refreshed"></span>
+            </div>
+        </div>
     </header>
-    <div class="grid">
-        <div class="headers" class="heading">Start Time</div>
-        <div class="headers" class="heading">Matchup</div>
-        <div class="headers" class="heading">Score</div>
-        <div class="headers" class="heading">Clock</div>
-        <div class="headers" class="heading">Period</div>
-        <div class="headers" class="heading">Moneyline</div>
-        <div class="headers" class="heading">Spreads</div>
-        <div class="headers" class="heading">Over/Under</div>
-    </div>
+    <table class="table table-striped">
+        <thead>
+            <th class="headers" class="heading">Start Time</th>
+            <th class="headers" class="heading">Matchup</th>
+            <th class="headers" class="heading">Score</th>
+            <th class="headers" class="heading">Clock</th>
+            <th class="headers" class="heading">Period</th>
+            <th class="headers" class="heading">Moneyline</th>
+            <th class="headers" class="heading">Spreads</th>
+            <th class="headers" class="heading">Over/Under</th>
+        </thead>
+        <tbody class="table-striped"></tbody>
+    </table>
 </body>
 </html>

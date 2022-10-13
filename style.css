@@ -4,7 +4,9 @@ body{
 
 header{
     background: grey;
-    padding:10px
+    padding:10px;
+    position: sticky;
+    top: 0;
 }
 
 header>h1{
@@ -12,13 +14,23 @@ header>h1{
     text-align: center;
 }
 
-.grid{
-    display: grid;
-    grid-template-columns: 2fr 2fr 1fr 1fr 1fr 4fr 4fr 4fr;
-    text-align: center;
-    vertical-align: center;
-    margin:20px;
+thead tr th {
+    position: sticky;
+    top: 68px;
+  }
+thead th{
+background: black !important;
+color: white;
 }
+
+tbody{
+    /* display: block; */
+    height: 80vh;
+    overflow: auto;
+    
+}
+
+
 
 .headers{
     font-size: 1.2rem;
@@ -26,10 +38,3 @@ header>h1{
     
 }
 
-.grid div{
-    border:2px solid black;
-    padding:.5rem;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-}
