@@ -11,7 +11,7 @@ const fetchOdds = async (testing)=>{
     const date = new Date()
     localStorage.setItem("last refreshed",JSON.stringify(date))
     document.querySelector(".last-refreshed").innerHTML = convertDate(date)
-    const oddsAPIRouter = "https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/odds/?apiKey=${API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american"
+    const oddsAPIRouter = `https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/odds/?apiKey=${API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`
     const resp = await fetch(oddsAPIRouter)
     data = await resp.json()
     console.log(data);
