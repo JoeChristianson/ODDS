@@ -35,6 +35,22 @@ tbody{
 .headers{
     font-size: 1.2rem;
     font-weight: 700;
-    
+    text-align: center;
 }
 
+td{
+    text-align: center;
+}
+
+td.teams-and-logos{
+    text-align: left;
+    margin: auto;
+}
+
+td.teams-and-logos img{
+    width:30px;
+}
+
+.text-align-left{
+    text-align: left;   
+}

@@ -1,26 +1,49 @@
 const selector = document.querySelector(".book-selector")
+const refreshCountdownElement = document.querySelector("#seconds-to-refresh")
 
 const grid = document.querySelector("tbody")
 let data;
 let liveScoresData
 let API_KEY
+let defaultBookmaker = window.localStorage.getItem("bookie")||"fanduel"
+
 let lastRefreshed = null;
 
-const fetchOdds = async (testing)=>{
-    // testing?alert("testing"):alert("fetching ODDS");
-    const date = new Date()
-    localStorage.setItem("last refreshed",JSON.stringify(date))
-    document.querySelector(".last-refreshed").innerHTML = convertDate(date)
-    const oddsAPIRouter = `https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/odds/?apiKey=${API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`
-    const resp = await fetch(oddsAPIRouter)
-    data = await resp.json()
-    console.log(data);
-    const liveScoresURL = "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard"
-    const liveScoresResponse = await fetch(liveScoresURL)
-    liveScoresData = await liveScoresResponse.json()
-    addLiveScoresToData()
-    return data
+const ncaaf = {espn:"college-football",oddsAPI:"americanfootball_ncaaf"}
+const nfl = {espn:"nfl",oddsAPI:"americanfootball_nfl"}
+const sports = {
+    ncaaf,nfl
 }
+let sport = nfl
+
+let timeElapsed = 0
+let intervalFunction;
+let refetchTimer = 30
+let refreshCountdown = refetchTimer;
+
+const fetchOdds = async (testing)=>{
+    try{
+        const date = new Date()
+        localStorage.setItem("last refreshed",JSON.stringify(date))
+        document.querySelector(".last-refreshed").innerHTML = convertDate(date)
+        const oddsAPIRouter = `https://api.the-odds-api.com/v4/sports/${sport.oddsAPI}/odds/?apiKey=${API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`
+        const resp = await fetch(oddsAPIRouter)
+        const newData = await resp.json()
+        console.log(newData);
+        if(!newData.message==="Unauthorized"){
+            data = newData
+        }
+        const liveScoresURL = `https://site.api.espn.com/apis/site/v2/sports/football/${sport.espn}/scoreboard`
+        const liveScoresResponse = await fetch(liveScoresURL)
+        liveScoresData = await liveScoresResponse.json()
+        addLiveScoresToData()
+        return data
+    }catch(err){
+        console.log(err)
+    }
+}
+
+refetch()
 
 const makeTable = async (bookmaker)=>{
     try{
@@ -32,29 +55,37 @@ const makeTable = async (bookmaker)=>{
 
         grid.innerHTML = ""
         tableArray.forEach(td=>{
-            // console.log(`${td.away} at ${td.home}: 
-            // MoneyLine: ${td.moneyline[0].name}:${td.moneyline[0].price} / ${td.moneyline[1].name}:${td.moneyline[1].price}
-            // Spreads: ${td.spreads[0].name}:${td.spreads[0].point} / ${td.spreads[1].name}:${td.spreads[1].point}
-            // Over/Under: ${td.overUnder[0].name}:${td.overUnder[0].point} / ${td.overUnder[1].name}:${td.overUnder[1].point}
-            // `);
             const row = `
             <tr>
             <td>
             ${td.startTime}
             </td>
-            <td>
+            <td class="teams-and-logos">
+            <div>
+            ${td.awayLogo?`<img src="${td.awayLogo}">`:""}
             ${td.away} at
             <br>
+            ${td.awayLogo?`<img src="${td.homeLogo}">`:""}
             ${td.home}
+            </div>
             </td>
             <td>
-            ${td.score}
+            ${td.period}
             </td>
             <td>
             ${td.clock}
             </td>
             <td>
-            ${td.period}
+            ${td.situation}
+            </td>
+            <td>
+            ${td.score}
+            </td>
+            <td>
+            ${td.totalPoints}
+            </td>
+            <td>
+            Over/Under: ${td.overUnder[0].point}
             </td>
             <td>
             ${td.moneyline[0].name}: ${td.moneyline[0].price} <br> ${td.moneyline[1].name}: ${td.moneyline[1].price}
@@ -62,15 +93,13 @@ const makeTable = async (bookmaker)=>{
             <td>
             ${td.spreads[0].name}: ${td.spreads[0].point} <br> ${td.spreads[1].name}: ${td.spreads[1].point}
             </td>
-            <td>
-            Over/Under: ${td.overUnder[0].point}
-            </td>
+
             </tr>
             `
             grid.innerHTML = grid.innerHTML+row
         })
         document.querySelectorAll("td").forEach(td=>{
-            if(td.innerHTML.includes("undefined")){
+            if(td.innerHTML.includes("undefined")&&!td.innerHTML.includes("img")){
                 td.innerHTML = "no odds"
         }
     })
@@ -87,18 +116,34 @@ async function launch(){
     }else{
         await fetchOdds()
     }
-    makeTable("fanduel")
+    makeTable(defaultBookmaker)
     fetchBookmakers(data)
     fetchBookmakers(data)
 }
 
 async function refetch(){
+    refreshCountdown = refetchTimer+1
+    refreshCountdownElement.innerHTML = refreshCountdown
+    intervalFunction = ()=>{
+        refreshCountdown--
+        refreshCountdownElement.innerHTML = refreshCountdown
+        if(refreshCountdown === 0){
+            refetch()
+        }else if(refreshCountdown>0){
+            setTimeout(()=>intervalFunction(),1000)
+        }
+    }
+    intervalFunction()
     await fetchOdds()
-    makeTable("fanduel")
+    makeTable(defaultBookmaker)
     fetchBookmakers(data)
 }
 
 document.querySelector(".refetch-once-btn").addEventListener("click",refetch)
+document.querySelector(".league-selector").addEventListener("change",(e)=>{
+    sport = sports[e.target.value]
+    console.log(sport);
+})
 
 function convertDataForTable(data,bookmaker){
     const res = data.map(d=>{
@@ -108,14 +153,18 @@ function convertDataForTable(data,bookmaker){
         const totals = bookie?.markets?.find(m=>m.key==="totals")?.outcomes;
         return {
             home:d.home_team,
+            homeLogo:d.homeLogo,
             away:d.away_team,
+            awayLogo:d.awayLogo,
             score:d.homeScore?`${d.awayScore} - ${d.homeScore}`:"",
             startTime:convertDate(d?.commence_time) || "",
             clock:d?.clock || "",
             period:d?.period || "",
             moneyline: headToHead || "N/A",
+            situation: d.situation || "",
             spreads:spreads ||"N/A",
-            overUnder:totals || "N/A"
+            overUnder:totals || "N/A",
+            totalPoints:parseInt(d.homeScore)?parseInt(d.homeScore)+parseInt(d.awayScore):""
         }
     })
 
@@ -140,12 +189,14 @@ function fetchBookmakers(data){
         option.textContent = book.title
         selector.appendChild(option)
     })
-    selector.value="fanduel"
+    selector.value=defaultBookmaker
     return bookmakers
 }
 
 selector.addEventListener("change",(e)=>{
     const {value} = e.target
+    defaultBookmaker = value
+    window.localStorage.setItem("bookie",value)
     makeTable(value)
 })
 
@@ -198,16 +249,24 @@ function addLiveScoresToData(){
     data.forEach(game=>{
         const {home_team,away_team} = game
         liveScoresData.events.forEach((liveGame,index)=>{
-            if(liveGame.name.includes(home_team)||liveGame.name.includes(away_team)){
-                // console.log(liveGame);
-                game.homeScore = liveGame.competitions[0].competitors.find(c=>c.homeAway==="home").score
-                game.awayScore = liveGame.competitions[0].competitors.find(c=>c.homeAway==="away").score
+            if(liveGame.name.includes(home_team)&&liveGame.name.includes(away_team)){
+                console.log(liveGame.name)
+                // console.log(game,liveGame);
+                const homeTeam = liveGame.competitions[0].competitors.find(c=>c.homeAway==="home")
+                const awayTeam = liveGame.competitions[0].competitors.find(c=>c.homeAway==="away")
+                console.log(liveGame.awayTeam);
+                game.homeScore = homeTeam.score
+                game.awayScore = awayTeam.score
                 game.clock = liveGame.status.displayClock
                 game.period = liveGame.status.period
+                game.situation = liveGame.competitions[0]?.situation?.downDistanceText
+                game.homeLogo = homeTeam.team.logo
+                game.awayLogo = awayTeam.team.logo
             }
         })
-        
-    
+        if(game.period<5){
+            console.log(game);
+        }
     })
 }
 

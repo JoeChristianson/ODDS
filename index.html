@@ -12,42 +12,55 @@
 <body>
     <header class="d-flex">
         <h1 class="px-4">
-            Sam's Odds
+            Hedge Fund
         </h1>
+        <div class="m-auto">
+            <label>League: </label>
+            <select class="league-selector">
+                <option value="nfl">NFL</option>
+                <option value="ncaaf">NCAAF</option>
+
+
+            </select>
+        </div>
         <div class="m-auto">
             <label>Bookmaker: </label>
             <select class="book-selector"></select>
         </div>
         <div class="header-buttons">
-            <button class="refetch-once-btn">Refresh Once</button>
-            <button class="refetch-timer-btn">Refresh on Timer</button>
-            <div>
-                <label for="timer-selector">Refresh Interval</label>
-                <select>
-                    <option value="30">30 seconds</option>
-                    <option value="60">One Minute</option>
-                    <option value="120">Two Minutes</option>
-                    <option value="300">Five Minutes</option>
-                    <option value="600">Ten Minutes</option>
-                    <option value="1800">Half Hour</option>
-                    <option value="3600">Hour</option>
-                </select>
-            </div>
-            <div>
-                Last Refreshed: <span class="last-refreshed"></span>
-            </div>
+            <button class="refetch-once-btn">REFRESH!</button>
+        </div>
+        <div>
+            <label for="timer-selector">Refresh Interval</label>
+            <select>
+                <option value="30">30 seconds</option>
+                <option value="60">One Minute</option>
+                <option value="120">Two Minutes</option>
+                <option value="300">Five Minutes</option>
+                <option value="600">Ten Minutes</option>
+                <option value="1800">Half Hour</option>
+                <option value="3600">Hour</option>
+            </select>
+        </div>
+        <div>
+            Last Refreshed: <span class="last-refreshed"></span>
+        </div>
+        <div>
+            Refreshing in: <span id="seconds-to-refresh"></span>
         </div>
     </header>
     <table class="table table-striped">
         <thead>
-            <th class="headers" class="heading">Start Time</th>
-            <th class="headers" class="heading">Matchup</th>
-            <th class="headers" class="heading">Score</th>
-            <th class="headers" class="heading">Clock</th>
-            <th class="headers" class="heading">Period</th>
-            <th class="headers" class="heading">Moneyline</th>
-            <th class="headers" class="heading">Spreads</th>
-            <th class="headers" class="heading">Over/Under</th>
+            <th class="headers" >Start Time</th>
+            <th class="headers text-align-left" >Matchup</th>
+            <th class="headers" >Period</th>
+            <th class="headers" >Clock</th>
+            <th class="headers">Situation</th>
+            <th class="headers" >Score</th>
+            <th class="headers" >Total Points</th>
+            <th class="headers" >Over/Under</th>
+            <th class="headers" >Moneyline</th>
+            <th class="headers" >Spreads</th>
         </thead>
         <tbody class="table-striped"></tbody>
     </table>
