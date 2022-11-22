@@ -3,10 +3,13 @@ body{
 }
 
 header{
-    background: grey;
+    background: #f6f6f6;
     padding:10px;
     position: sticky;
     top: 0;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
 }
 
 header>h1{
@@ -14,9 +17,43 @@ header>h1{
     text-align: center;
 }
 
+header button{
+    padding: 0.6em;
+    border-radius: 3px;
+    border: none;
+    color: white;
+
+    margin-right: 30px;
+}
+
+.success{
+    background: #46c246;
+}
+
+.danger{
+    background: #e03e3e
+}
+
+header h4{
+    margin-right: 45px;
+}
+
+.dropdowns-cont{
+    display: flex;
+    flex-direction: row;
+}
+
+.dropdowns-cont>div{
+    display: flex;
+    flex-direction: column;
+    margin:.4em;
+    margin-right:3rem;
+}
+
+
 thead tr th {
     position: sticky;
-    top: 68px;
+    top: 100px;
   }
 thead th{
 background: black !important;

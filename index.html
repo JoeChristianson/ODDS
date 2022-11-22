@@ -1,68 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="index.js" defer></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <header class="d-flex">
-        <h1 class="px-4">
-            Hedge Fund
-        </h1>
-        <div class="m-auto">
-            <label>League: </label>
-            <select class="league-selector">
-                <option value="nfl">NFL</option>
-                <option value="ncaaf">NCAAF</option>
-
-
-            </select>
+      <h1 class="px-4">Hedge Fund</h1>
+      <div class="dropdowns-cont">
+        <div class="">
+          <label>League: </label>
+          <select class="league-selector">
+            <option selected value="nfl">NFL</option>
+            <option value="ncaaf">NCAAF</option>
+          </select>
         </div>
-        <div class="m-auto">
-            <label>Bookmaker: </label>
-            <select class="book-selector"></select>
-        </div>
-        <div class="header-buttons">
-            <button class="refetch-once-btn">REFRESH!</button>
+        <div class="">
+          <label>Bookmaker: </label>
+          <select class="book-selector"></select>
         </div>
         <div>
-            <label for="timer-selector">Refresh Interval</label>
-            <select>
-                <option value="30">30 seconds</option>
-                <option value="60">One Minute</option>
-                <option value="120">Two Minutes</option>
-                <option value="300">Five Minutes</option>
-                <option value="600">Ten Minutes</option>
-                <option value="1800">Half Hour</option>
-                <option value="3600">Hour</option>
-            </select>
+          <label for="timer-selector">Refresh Interval</label>
+          <select id="timer-selector">
+            <option value="30">30 seconds</option>
+            <option value="60">One Minute</option>
+            <option value="120">Two Minutes</option>
+            <option value="300">Five Minutes</option>
+            <option value="600">Ten Minutes</option>
+            <option value="1800">Half Hour</option>
+            <option selected value="3600">Hour</option>
+          </select>
         </div>
-        <div>
-            Last Refreshed: <span class="last-refreshed"></span>
-        </div>
-        <div>
-            Refreshing in: <span id="seconds-to-refresh"></span>
-        </div>
+      </div>
+      <div class="header-buttons">
+        <button class="refetch-once-btn success">REFRESH!</button>
+      </div>
+      <h4>Refreshing in: <span id="seconds-to-refresh"></span></h4>
+      <h4>Last Refreshed: <span class="last-refreshed"></span></h4>
+      <div class="header-buttons">
+        <button id="reset-key-btn" class="danger">Reset Key</button>
+      </div>
     </header>
     <table class="table table-striped">
-        <thead>
-            <th class="headers" >Start Time</th>
-            <th class="headers text-align-left" >Matchup</th>
-            <th class="headers" >Period</th>
-            <th class="headers" >Clock</th>
-            <th class="headers">Situation</th>
-            <th class="headers" >Score</th>
-            <th class="headers" >Total Points</th>
-            <th class="headers" >Over/Under</th>
-            <th class="headers" >Moneyline</th>
-            <th class="headers" >Spreads</th>
-        </thead>
-        <tbody class="table-striped"></tbody>
+      <thead>
+        <th class="headers">Start Time</th>
+        <th class="headers text-align-left">Matchup</th>
+        <th class="headers">Period</th>
+        <th class="headers">Clock</th>
+        <th class="headers">Situation</th>
+        <th class="headers">Score</th>
+        <th class="headers">Total Points</th>
+        <th class="headers">Spreads</th>
+        <th class="headers">Moneyline</th>
+        <th class="headers">Over/Under</th>
+      </thead>
+      <tbody class="table-striped"></tbody>
     </table>
-</body>
+  </body>
 </html>
